@@ -3,7 +3,7 @@ const News = require('./model/News');
 require('dotenv').config();
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect("mongodb://mongodb:27017/nm")
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
 
