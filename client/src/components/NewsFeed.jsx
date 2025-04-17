@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
 import { fetchSubscribedNews } from "../redux/actions";
 
-const socket = io("http://localhost:5000", { transports: ["websocket"] });
+const socket = io("https://newsmania-jccp.onrender.com", { transports: ["websocket"] });
 
 const NewsFeed = () => {
   const dispatch = useDispatch();
