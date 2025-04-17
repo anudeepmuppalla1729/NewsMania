@@ -1,9 +1,23 @@
 import axios from 'axios';
 
+// Action to search news
+export const searchNews = (query) => async (dispatch) => {
+  try {
+    if (!query.trim()) {
+      dispatch({ type: 'CLEAR_SEARCH_RESULTS' });
+      return;
+    }
+    const res = await axios.get(`http://localhost:5000/api/news/search?q=${encodeURIComponent(query)}`);
+    dispatch({ type: 'SET_SEARCH_RESULTS', payload: res.data });
+  } catch (error) {
+    console.error("Error searching news:", error);
+    dispatch({ type: 'SET_SEARCH_RESULTS', payload: [] });
+  }
+};
 
 export const fetchNews = (category) => async (dispatch) => {
   try {
-    const res = await axios.get(`https://news-repo-backend.onrender.com/api/news/${category}`);
+    const res = await axios.get(`http://localhost:5000/api/news/${category}`);
     console.warn("Fetched News Data from API:", res.data); // Debugging Log
     dispatch({ type: 'FETCH_NEWS', payload: res.data });
   } catch (error) {
@@ -14,7 +28,7 @@ export const fetchNews = (category) => async (dispatch) => {
 
 export const fetchTrendingNews = () => async (dispatch) => {
   try {
-    const res = await axios.get(`https://news-repo-backend.onrender.com/api/news/trending`);
+    const res = await axios.get(`http://localhost:5000/api/news/trending`);
     console.warn("Fetched Trending News:", res.data);
     dispatch({ type: 'FETCH_TRENDING_NEWS', payload: res.data });
   } catch (error) {
@@ -39,7 +53,7 @@ export const fetchSubscribedNews = () => async (dispatch, getState) => {
   try {
     const responses = await Promise.all(
       subscribedCategories.map((category) =>
-        axios.get(`https://news-repo-backend.onrender.com/api/news/${category}`)
+        axios.get(`http://localhost:5000/api/news/${category}`)
       )
     );
 

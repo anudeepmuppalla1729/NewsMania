@@ -90,6 +90,53 @@ router.post("/", async (req, res) => {
  *       500:
  *         description: Server error
  */
+/**
+ * @swagger
+ * /api/news/search:
+ *   get:
+ *     summary: Search news articles by keyword
+ *     tags: [News]
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         description: Search query string
+ *     responses:
+ *       200:
+ *         description: Returns matching news articles
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/News'
+ *       500:
+ *         description: Server error
+ */
+router.get("/search", async (req, res) => {
+  try {
+    const { q } = req.query;
+    if (!q) {
+      return res.status(200).json([]);
+    }
+
+    const searchResults = await News.find(
+      { $text: { $search: q } },
+      { score: { $meta: "textScore" } }
+    ).sort({ score: { $meta: "textScore" } });
+
+    if (searchResults.length === 0) {
+      return res.status(200).json({ message: "No articles found", articles: [] });
+    }
+
+    res.json(searchResults);
+  } catch (error) {
+    console.error("Error searching news:", error);
+    res.status(500).json({ error: "Server Error" });
+  }
+});
+
 router.get("/trending", async (req, res) => {
   try {
     const trendingNews = await News.aggregate([

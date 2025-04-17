@@ -1,4 +1,4 @@
-const initialState = { news: [], trending: [], subscribedCategories: [] };
+const initialState = { news: [], trending: [], subscribedCategories: ['Business', 'Tech', 'Sports'], searchResults: null };
 
 export const newsReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -28,6 +28,12 @@ export const newsReducer = (state = initialState, action) => {
 
     case "CLEAR_NEWS":
       return { ...state, news: [] };
+
+    case "SET_SEARCH_RESULTS":
+      return { ...state, searchResults: action.payload };
+
+    case "CLEAR_SEARCH_RESULTS":
+      return { ...state, searchResults: null };
 
     default:
       return state;
