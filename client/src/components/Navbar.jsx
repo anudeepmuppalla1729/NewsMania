@@ -7,6 +7,9 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (query) => {
+    if (query != '') {
+    dispatch(searchNews(query));
+    }
     dispatch(searchNews(query));
   };
 
